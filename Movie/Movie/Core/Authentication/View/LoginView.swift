@@ -10,6 +10,8 @@ import SwiftUI
 struct LoginView: View 
 {
     @State private var showAlert = false
+    @State private var showError = false
+    @State private var errorMessage = ""
     
     @StateObject var viewModel = LoginViewModel()
     
@@ -95,7 +97,12 @@ struct LoginView: View
                             Spacer()
                             Button{
                                 Task {
-                                    try await viewModel.login()
+                                    do {
+                                        try await viewModel.login()
+                                    } catch {
+                                        errorMessage = error.localizedDescription
+                                        showError = true
+                                    }
                                 }
                             } label: {
                                 HStack {
@@ -128,10 +135,13 @@ struct LoginView: View
                 }.alert(isPresented: $showAlert) {
                     Alert(title: Text("Check your Mail ✉️"))
                 }
+                .alert("Error", isPresented: $showError) {
+                    Button("OK", role: .cancel) { }
+                } message: {
+                    Text(errorMessage)
+                }
             }.navigationBarBackButtonHidden()
         }
-       
-        
     }
 }
 

@@ -9,14 +9,15 @@ import SwiftUI
 
 struct ContentView: View 
 {
+    @ObservedObject var authService = AuthService.shared
     
     var body: some View {
         Group {
-//            if AuthService.shared.isUserLoggedIn == false || AuthService.shared.isUserLoggedIn == nil {
-//                LoginView()
-//            } else {
+            if authService.isUserLoggedIn {
                 TabBar()
-//            }
+            } else {
+                LoginView()
+            }
         }
     }
 }

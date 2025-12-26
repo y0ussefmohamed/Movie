@@ -16,6 +16,8 @@ struct SignupView: View
     @State var fullname = ""
     
     @State private var isPasswordVisible = false
+    @State private var showError = false
+    @State private var errorMessage = ""
     
     @StateObject var viewModel = SignupViewModel()
     var body: some View {
@@ -96,7 +98,12 @@ struct SignupView: View
                         Spacer()
                         Button {
                             Task {
-                                try await viewModel.createUser()
+                                do {
+                                    try await viewModel.createUser()
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    showError = true
+                                }
                             }
                         } label: {
                             HStack {
@@ -128,6 +135,11 @@ struct SignupView: View
                 
             }
         }.navigationBarBackButtonHidden()
+        .alert("Error", isPresented: $showError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
+        }
         
     }
 }

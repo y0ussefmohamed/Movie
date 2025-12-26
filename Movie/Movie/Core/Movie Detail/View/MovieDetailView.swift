@@ -120,6 +120,7 @@ struct MovieDetailView: View
                                                 }
                                                 
                                                 Text(member.original_name ?? member.name ?? "Zax")
+                                                    .foregroundStyle(.white)
                                             }
                                         } else {
                                             VStack {

@@ -2,74 +2,68 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-class AuthService
+class AuthService: ObservableObject
 {
-    private let LoggingStateKey = "LOG_STATE"
+    @Published var currentUser: User?
+    @Published var isUserLoggedIn: Bool = false
     
-    // Singleton Object ( One Object Shared Across the Application )
     static let shared = AuthService()
     
-    @Published var currentUser: User? //  Doesn't do anything but leave it as it is
-    @Published var isUserLoggedIn: Bool?
-    
     init() {
-        fetchLoggingState()
+        // Listen to Firebase Auth state changes
+        Auth.auth().addStateDidChangeListener { [weak self] auth, user in
+            if let uid = user?.uid {
+                self?.isUserLoggedIn = true
+                self?.fetchUser(withUid: uid)
+            } else {
+                self?.isUserLoggedIn = false
+                self?.currentUser = nil
+            }
+        }
     }
-    
     
     @MainActor
-    func createUser(withEmail email: String , password: String , fullname: String) async throws {
-        do {
-            try await Auth.auth().createUser(withEmail: email, password: password)
-            currentUser?.fullname = fullname
-            //try await saveUserData(withEmail: email, fullname: fullname, uid: result.user.uid)
-            isUserLoggedIn = true
-            saveLoggingState()
-        } catch {
-            print("DEBUG: Failed to Create a User with Error -> \(error)")
-        }
+    func createUser(withEmail email: String, password: String, fullname: String) async throws {
+        // 1. Create user in Firebase Auth
+        let result = try await Auth.auth().createUser(withEmail: email, password: password)
+        // 2. Save user data to Firestore
+        try await saveUserData(withEmail: email, fullname: fullname, uid: result.user.uid)
     }
     
+    @MainActor
     func login(withEmail email: String, password: String) async throws {
-        do {
-            try await Auth.auth().signIn(withEmail: email, password: password)
-            isUserLoggedIn = true
-            saveLoggingState()
-        } catch {
-            print("DEBUG: Failed to Login User with Error -> \(error)")
-        }
+        try await Auth.auth().signIn(withEmail: email, password: password)
     }
-    
     
     func logout() {
         try? Auth.auth().signOut()
-        isUserLoggedIn = false
-        saveLoggingState()
     }
     
-    func fetchLoggingState() {
-        self.isUserLoggedIn = UserDefaults.standard.bool(forKey: LoggingStateKey)
+    // MARK: - Firestore
+    
+    func saveUserData(withEmail email: String, fullname: String, uid: String) async throws {
+        let user = User(id: uid, fullname: fullname, email: email)
+        guard let userData = try? Firestore.Encoder().encode(user) else { return }
+        try await Firestore.firestore().collection("users").document(uid).setData(userData)
+        self.currentUser = user
     }
     
-    func saveLoggingState() {
-        if( isUserLoggedIn == nil || isUserLoggedIn == false) {
-            UserDefaults.standard.setValue(false, forKey: LoggingStateKey) // no user or user is logged out
-        } else {
-            UserDefaults.standard.setValue(true, forKey: LoggingStateKey) // user is logged in
+    func fetchUser(withUid uid: String) {
+        Firestore.firestore().collection("users").document(uid).getDocument { [weak self] snapshot, error in
+            if let error = error {
+                print("DEBUG: Failed to fetch user with error: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let self = self else { return }
+            
+            if let snapshot = snapshot, snapshot.exists {
+                do {
+                    self.currentUser = try snapshot.data(as: User.self)
+                } catch {
+                    print("DEBUG: Failed to decode user data: \(error)")
+                }
+            }
         }
     }
-    
-    //func saveUserData(
-    //        withEmail email: String,
-    //        fullname: String,uid: String) async throws {
-    //            // 1. make a user object  2. make userData using user object  3. save user in a collection using the data
-    //            let user = User(id: uid, fullname: fullname, email: email)
-    //
-    //            guard let userData = try? Firestore.Encoder().encode(user) else {
-    //                print("DEBUG: Firestore Failed to Encode User Data with Error")
-    //                return
-    //            }
-    //
-    //            try await Firestore.firestore().collection("users").document(uid).setData(userData)
-    //        }
 }

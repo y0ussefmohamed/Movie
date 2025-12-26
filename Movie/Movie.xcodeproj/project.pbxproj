@@ -385,16 +385,8 @@
 			children = (
 				86E745392BAA68B200AC5E19 /* Sub View */,
 				86E745362BAA634500AC5E19 /* View */,
-				86E745352BAA633A00AC5E19 /* View Model */,
 			);
 			path = "Movie Detail";
-			sourceTree = "<group>";
-		};
-		86E745352BAA633A00AC5E19 /* View Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "View Model";
 			sourceTree = "<group>";
 		};
 		86E745362BAA634500AC5E19 /* View */ = {

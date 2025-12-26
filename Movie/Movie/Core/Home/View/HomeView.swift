@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomeView: View
 {
+    @ObservedObject var authService = AuthService.shared
     @StateObject var moviesViewModel = MoviesViewModel()
     @State var searchText = ""
     
@@ -29,13 +30,13 @@ struct HomeView: View
                                 .foregroundStyle(Color(red: 0.83, green: 0.83, blue: 0.95))
                                 .fontWeight(.semibold)
                             
-                            if AuthService.shared.currentUser?.fullname == nil {
+                            if authService.currentUser?.fullname == nil {
                                 Text("Youssef Mohamed")
                                     .font(.title2)
                                     .foregroundStyle(.white)
                                     .fontWeight(.heavy)
                             } else {
-                                Text("\(AuthService.shared.currentUser?.fullname ?? "Joe")")
+                                Text("\(authService.currentUser?.fullname ?? "Joe")")
                                     .foregroundStyle(.white)
                                     .fontWeight(.semibold)
                             }
@@ -44,7 +45,7 @@ struct HomeView: View
                         Spacer()
                         
                         Button {
-                            AuthService.shared.logout()
+                            authService.logout()
                         } label: {
                             Image(systemName: "arrow.forward.square.fill")
                                 .resizable()

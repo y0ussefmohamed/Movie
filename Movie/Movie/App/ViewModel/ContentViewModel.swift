@@ -6,7 +6,6 @@ class ContentViewModel: ObservableObject
 {
     init() {
         userLoggedIn()
-        AuthService.shared.saveLoggingState()
     }
     
     @Published var isUserLoggedIn: Bool?
@@ -18,6 +17,5 @@ class ContentViewModel: ObservableObject
             .map { $0 } // Convert Bool to Bool?
             .assign(to: \ContentViewModel.isUserLoggedIn, on: self)
             .store(in: &cancellables)
-        
     }
 }
