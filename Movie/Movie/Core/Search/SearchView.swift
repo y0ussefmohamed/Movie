@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SearchView: View {
-    @StateObject var moviesViewModel = MoviesViewModel()
+    @StateObject var moviesViewModel = MoviesViewModel(moviesService: MoviesService())
     
     @State var searchText: String = ""
     let columns = [

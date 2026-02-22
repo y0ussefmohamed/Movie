@@ -9,7 +9,6 @@ enum MoviesServiceError: Error {
 struct MoviesService 
 {
     private let API_KEY = "39d7b5254926a27f20f39c1509a22ee8"
-    static let shared = MoviesService()
     
     @MainActor
     func getNowInCinemaMovies() async throws -> [Movie] {

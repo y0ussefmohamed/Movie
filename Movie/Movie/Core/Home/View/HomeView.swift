@@ -4,7 +4,7 @@ import SwiftUI
 struct HomeView: View
 {
     @ObservedObject var authService = AuthService.shared
-    @StateObject var moviesViewModel = MoviesViewModel()
+    @StateObject var moviesViewModel = MoviesViewModel(moviesService: MoviesService())
     @State var searchText = ""
     
     let columns = [
