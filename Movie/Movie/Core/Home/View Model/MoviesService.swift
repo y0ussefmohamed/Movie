@@ -5,12 +5,11 @@ enum MoviesServiceError: Error {
     case networkError
 }
 
-
-struct MoviesService 
+@MainActor
+final class MoviesService
 {
     private let API_KEY = "39d7b5254926a27f20f39c1509a22ee8"
     
-    @MainActor
     func getNowInCinemaMovies() async throws -> [Movie] {
         guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(API_KEY)&with_release_type=2|3") else {
             throw MoviesServiceError.networkError
@@ -26,7 +25,6 @@ struct MoviesService
         }
     }
     
-    @MainActor
     func getTrendingMovies() async throws -> [Movie] {
         guard let url = URL(string: "https://api.themoviedb.org/3/trending/movie/day?api_key=\(API_KEY)") else {
             throw MoviesServiceError.networkError
@@ -42,7 +40,6 @@ struct MoviesService
         }
     }
     
-    @MainActor
     func getUpcomingMovies() async throws -> [Movie] {
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/upcoming?api_key=\(API_KEY)") else {
             throw MoviesServiceError.networkError
@@ -59,7 +56,6 @@ struct MoviesService
         }
     }
     
-    @MainActor
     func getTopRatedMovies() async throws -> [Movie] {
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/top_rated?api_key=\(API_KEY)") else {
             throw MoviesServiceError.networkError
@@ -106,5 +102,4 @@ struct MoviesService
             throw MoviesServiceError.decodingError
         }
     }
-
 }

@@ -43,5 +43,4 @@ class FavoriteMoviesViewModel: ObservableObject
             UserDefaults.standard.set(encodeDataToJSON, forKey: favoriteMoviesKey)
         }
     }
-    
 }

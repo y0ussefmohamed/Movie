@@ -46,7 +46,7 @@ class MoviesViewModel: ObservableObject
         self.searchedMoviesWithQuery = try await moviesService.search(for: movieName)
     }
     
-    func getMovieCast(forMovieID: Int) async throws { // use it in the movieDetailView.task{} with movieID
+    func getMovieCast(forMovieID: Int) async throws {
         self.movieCast = try await moviesService.getMovieCast(movieID: forMovieID)
     }
 }

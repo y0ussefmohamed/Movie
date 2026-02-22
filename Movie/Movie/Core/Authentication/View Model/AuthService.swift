@@ -10,7 +10,10 @@ class AuthService: ObservableObject
     static let shared = AuthService()
     
     init() {
-        // Listen to Firebase Auth state changes
+        self.addListener()
+    }
+    
+    private func addListener() {
         Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             if let uid = user?.uid {
                 self?.isUserLoggedIn = true
@@ -40,7 +43,6 @@ class AuthService: ObservableObject
     }
     
     // MARK: - Firestore
-    
     func saveUserData(withEmail email: String, fullname: String, uid: String) async throws {
         let user = User(id: uid, fullname: fullname, email: email)
         guard let userData = try? Firestore.Encoder().encode(user) else { return }
