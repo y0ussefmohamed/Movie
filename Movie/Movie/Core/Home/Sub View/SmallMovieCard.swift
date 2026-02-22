@@ -14,9 +14,7 @@ struct SmallMovieCard: View
     let movie: Movie
     var body: some View {
         
-        
         VStack(spacing: 0) {
-            
             if let moviePoster = movie.backdrop_path {
                 AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w780/\(moviePoster)" )) { image in
                     image
@@ -33,7 +31,7 @@ struct SmallMovieCard: View
                         ProgressView()
                     }
                 }
-                  
+                
             } else {
                 ZStack {
                     Rectangle()
@@ -43,7 +41,7 @@ struct SmallMovieCard: View
                     ProgressView()
                 }
             }
-              
+            
             
             ZStack {
                 Rectangle()
@@ -88,12 +86,8 @@ struct SmallMovieCard: View
                     }.padding(5).padding(.bottom,5).padding(.horizontal,8)
                         .frame(width: 200)
                 }.frame(height: 70)
-                
             }
-            
         }
-        
-        
     }
 }
 

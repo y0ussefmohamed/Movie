@@ -170,16 +170,10 @@ struct MovieDetailView: View
                         .cornerRadius(20).padding()
                 }
             }
-                
-            
-            
-            
+
         }
     }
 }
-
-
-
 
 #Preview {
     MovieDetailView(movie: Movie(id: 1, title: "Dummy Movie 1", original_title: "Original Dummy Movie 1", backdrop_path: "dn3gbDpXPSwC6saMJOHkCiFA9jn.jpg", overview: "This is a dummy overview for Dummy Movie 1", vote_count: 100, release_date: "2023-01-01", vote_average: 7.5, popularity: 80.0) )

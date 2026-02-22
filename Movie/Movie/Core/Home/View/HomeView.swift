@@ -65,7 +65,7 @@ struct HomeView: View
                                 Image(systemName: "magnifyingglass")
                                     .resizable()
                                     .frame(width: 20, height: 20)
-                                    
+                                
                             }.foregroundStyle(.gray).padding().background(Color(red: 0.24, green: 0.25, blue: 0.35)).cornerRadius(20).padding()
                         }
                         
@@ -93,7 +93,7 @@ struct HomeView: View
                                                 .foregroundStyle(.white)
                                                 .padding([.bottom,.leading])
                                         }
-
+                                        
                                     }
                                 }
                             }

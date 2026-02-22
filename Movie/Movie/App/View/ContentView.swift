@@ -13,7 +13,7 @@ struct ContentView: View
     
     var body: some View {
         Group {
-            if authService.isUserLoggedIn {
+            if authService.currentUser != nil {
                 TabBar()
             } else {
                 LoginView()

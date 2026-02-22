@@ -4,7 +4,6 @@ import Foundation
 class FavoriteMoviesViewModel: ObservableObject 
 {
     let favoriteMoviesKey = "favorite_movies"
-    let downloadedMovieskey = "downloaded_movies"
     
     @Published var favoriteMovies: [Movie] = []
     @Published var downloadedMovies: [Movie] = []
@@ -41,7 +40,6 @@ class FavoriteMoviesViewModel: ObservableObject
     
     func saveFavoriteMovies() {
         if let encodeDataToJSON = try? JSONEncoder().encode(favoriteMovies) {
-            // put data in db
             UserDefaults.standard.set(encodeDataToJSON, forKey: favoriteMoviesKey)
         }
     }

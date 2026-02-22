@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DownloadsView: View {
     @ObservedObject var viewModel = DownloadsViewModel()
+    
     var body: some View {
         ZStack {
             Color(red: 0.15, green: 0.16, blue: 0.24).ignoresSafeArea(edges: .all)
